@@ -4953,9 +4953,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write("Function");
                         break;
                         
-                    case TypeReferenceSerializationKind.CustomType:
-                        if(customEmitter) {
-                            write(customEmitter.emitNodeMetadata(resolver.getTypeFromTypeNode(node)));
+                    case TypeReferenceSerializationKind.InterfaceType:
+                        if(customInterfaceEmitter) {
+                            write(customInterfaceEmitter.emitInterfaceMetadata(resolver.getTypeFromTypeNode(node)));
                             break;
                         }
                         
