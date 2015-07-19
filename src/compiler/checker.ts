@@ -1,4 +1,5 @@
 /// <reference path="binder.ts"/>
+/// <reference path="custom.ts"/>
 
 /* @internal */
 namespace ts {
@@ -14234,6 +14235,13 @@ namespace ts {
             return type.flags & TypeFlags.ObjectType && getSignaturesOfType(type, SignatureKind.Call).length > 0;
         }
         
+        function isCustomType(type: Type):boolean {
+            if(customChecker) {
+                return customChecker.checkType(type);
+            }
+            return false;
+        }
+        
         function getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind {
             // Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
             let symbol = resolveEntityName(node.typeName, SymbolFlags.Value, /*ignoreErrors*/ true);
@@ -14272,6 +14280,9 @@ namespace ts {
             }
             else if (isArrayType(type)) {
                 return TypeReferenceSerializationKind.ArrayLikeType;
+            }
+            else if(isCustomType(type)) {
+                return TypeReferenceSerializationKind.CustomType;
             }
             else {
                 return TypeReferenceSerializationKind.ObjectType;
@@ -14376,6 +14387,7 @@ namespace ts {
                 getBlockScopedVariableId,
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
+                getTypeFromTypeNode
             };
         }
 

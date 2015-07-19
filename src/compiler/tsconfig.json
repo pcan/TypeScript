@@ -20,6 +20,7 @@
         "program.ts",
         "commandLineParser.ts",
         "tsc.ts",
-        "diagnosticInformationMap.generated.ts"
+        "diagnosticInformationMap.generated.ts",
+        "custom.ts"
     ]
 }
