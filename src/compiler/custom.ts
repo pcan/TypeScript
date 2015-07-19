@@ -1,53 +1,33 @@
 
 namespace ts {
 
-    export let customChecker: CustomChecker = null;
-    export let customEmitter: CustomEmitter = null;
-
-    export interface CustomChecker {
-        checkType(node: Type): boolean;
+    export interface CustomInterfaceEmitter {
+        emitInterfaceMetadata(node: Type): string;
     }
-
-
-    export interface CustomEmitter {
-        emitNodeMetadata(node: Type): string;
-    }
-
-
-    function recursiveTypeNameLookup(type: Type): string {
+    
+    function recursivelyBuildInterfaceObject(type: Type) {
         if (type) {
-            var s = type.symbol;
-            var baseTypes: ObjectType[];
-            if (s) {
-                if (s.name === 'IRootScopeService') {
-                    return '\'$scope\'';
+            var interfaceObj : any = {__i:type.symbol.name};
+            var baseTypes: ObjectType[] = (<InterfaceType>type).resolvedBaseTypes;
+            var baseInterfaces : any[] = [];
+            if (baseTypes && baseTypes.length > 0) {
+                for (var i = 0; i < baseTypes.length; i++) {
+                    baseInterfaces.push(recursivelyBuildInterfaceObject(baseTypes[i]));
                 }
-                baseTypes = (<InterfaceType>type).resolvedBaseTypes;
-                if (baseTypes && baseTypes.length > 0) {
-                    for (var i = 0; i < baseTypes.length; i++) {
-                        return recursiveTypeNameLookup(baseTypes[i]);
-                    }
-                }
+                interfaceObj.__base = baseInterfaces;
             }
+            return interfaceObj;
         }
-        return '';
     }
+    
+    class JsonObjInterfaceEmitter implements CustomInterfaceEmitter {
 
-
-    class MyEmitter implements CustomEmitter, CustomChecker {
-
-        checkType(node: Type): boolean {
-            return recursiveTypeNameLookup(node) !== '';
-        }
-
-        emitNodeMetadata(node: Type): string {
-            return recursiveTypeNameLookup(node);
+        emitInterfaceMetadata(node: Type): string {
+            return JSON.stringify(recursivelyBuildInterfaceObject(node));
         }
 
     }
-
-    var myEmitter = new MyEmitter();
-    customChecker = myEmitter;
-    customEmitter = myEmitter;
+    
+    export let customInterfaceEmitter: CustomInterfaceEmitter = new JsonObjInterfaceEmitter();
 
 }

@@ -1,5 +1,4 @@
 /// <reference path="binder.ts"/>
-/// <reference path="custom.ts"/>
 
 /* @internal */
 namespace ts {
@@ -14235,11 +14234,8 @@ namespace ts {
             return type.flags & TypeFlags.ObjectType && getSignaturesOfType(type, SignatureKind.Call).length > 0;
         }
         
-        function isCustomType(type: Type):boolean {
-            if(customChecker) {
-                return customChecker.checkType(type);
-            }
-            return false;
+        function isInterfaceType(type: Type):boolean {
+            return type.symbol.flags & SymbolFlags.Interface ? true : false;
         }
         
         function getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind {
@@ -14281,8 +14277,8 @@ namespace ts {
             else if (isArrayType(type)) {
                 return TypeReferenceSerializationKind.ArrayLikeType;
             }
-            else if(isCustomType(type)) {
-                return TypeReferenceSerializationKind.CustomType;
+            else if(isInterfaceType(type)) {
+                return TypeReferenceSerializationKind.InterfaceType;
             }
             else {
                 return TypeReferenceSerializationKind.ObjectType;

@@ -1549,7 +1549,7 @@ namespace ts {
         TypeWithCallSignature,              // The TypeReferenceNode resolves to a Function type or a type
                                             // with call signatures.
         ObjectType,                         // The TypeReferenceNode resolves to any other type.
-        CustomType                          // The type used by emitter customizer
+        InterfaceType                       // The type used by custom interface metadata emitter
     }
 
     /* @internal */
