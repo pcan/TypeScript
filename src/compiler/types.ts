@@ -1548,6 +1548,7 @@ namespace ts {
         TypeWithCallSignature,              // The TypeReferenceNode resolves to a Function type or a type
                                             // with call signatures.
         ObjectType,                         // The TypeReferenceNode resolves to any other type.
+        CustomType                          // The type used by emitter customizer
     }
 
     /* @internal */
@@ -1574,6 +1575,7 @@ namespace ts {
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind; 
+        getTypeFromTypeNode(node: TypeNode): Type;
     }
 
     export const enum SymbolFlags {

@@ -1,5 +1,6 @@
 /// <reference path="checker.ts"/>
 /// <reference path="declarationEmitter.ts"/>
+/// <reference path="custom.ts"/>
 
 /* @internal */
 namespace ts {
@@ -4951,6 +4952,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case TypeReferenceSerializationKind.TypeWithCallSignature:
                         write("Function");
                         break;
+                        
+                    case TypeReferenceSerializationKind.CustomType:
+                        if(customEmitter) {
+                            write(customEmitter.emitNodeMetadata(resolver.getTypeFromTypeNode(node)));
+                            break;
+                        }
                         
                     case TypeReferenceSerializationKind.ObjectType:
                         write("Object");
