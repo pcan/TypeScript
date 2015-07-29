@@ -2071,7 +2071,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
-            
+
             function emitQualifiedName(node: QualifiedName) {
                 emit(node.left);
                 write(".");
@@ -2094,12 +2094,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     emitEntityNameAsExpression(node.left, /*useFallback*/ false);
                 }
-                
+
                 write(".");
                 emitNodeWithoutSourceMap(node.right);
             }
-            
-            function emitEntityNameAsExpression(node: EntityName, useFallback: boolean) {                
+
+            function emitEntityNameAsExpression(node: EntityName, useFallback: boolean) {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                         if (useFallback) {
@@ -2107,10 +2107,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             emitExpressionIdentifier(<Identifier>node);
                             write(" !== 'undefined' && ");
                         }
-                        
+
                         emitExpressionIdentifier(<Identifier>node);
                         break;
-                        
+
                     case SyntaxKind.QualifiedName:
                         emitQualifiedNameAsExpression(<QualifiedName>node, useFallback);
                         break;
@@ -3021,7 +3021,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (compilerOptions.module === ModuleKind.CommonJS || compilerOptions.module === ModuleKind.AMD || compilerOptions.module === ModuleKind.UMD) {
                         if (!currentSourceFile.symbol.exports["___esModule"]) {
                             if (languageVersion === ScriptTarget.ES5) {
-                                // default value of configurable, enumerable, writable are `false`. 
+                                // default value of configurable, enumerable, writable are `false`.
                                 write("Object.defineProperty(exports, \"__esModule\", { value: true });");
                                 writeLine();
                             }
@@ -4251,7 +4251,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (ctor) {
                     // Emit all the directive prologues (like "use strict").  These have to come before
                     // any other preamble code we write (like parameter initializers).
-                    startIndex = emitDirectivePrologues(ctor.body.statements, /*startWithNewLine*/ true);                    
+                    startIndex = emitDirectivePrologues(ctor.body.statements, /*startWithNewLine*/ true);
                     emitDetachedComments(ctor.body.statements);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
@@ -4810,6 +4810,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return false;
             }
 
+            function shouldEmitClassNameMetadata(node: Declaration): boolean {
+                switch (node.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                        return true;
+                }
+                return false;
+            }
+
             function shouldEmitParamTypesMetadata(node: Declaration): boolean {
                 // This method determines whether to emit the "design:paramtypes" metadata based on the node's kind.
                 // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
@@ -4822,7 +4830,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 return false;
             }
-            
+
             /** Serializes the type of a declaration to an appropriate JS constructor value. Used by the __metadata decorator for a class member. */
             function emitSerializedTypeOfNode(node: Node) {
                 // serialization of the type of a declaration uses the following rules:
@@ -4833,45 +4841,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // * The serialized type of an AccessorDeclaration is the serialized type of the return type annotation of its getter or parameter type annotation of its setter.
                 // * The serialized type of any other FunctionLikeDeclaration is "Function".
                 // * The serialized type of any other node is "void 0".
-                // 
+                //
                 // For rules on serializing type annotations, see `serializeTypeNode`.
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
                         write("Function");
                         return;
-                        
-                    case SyntaxKind.PropertyDeclaration:    
+
+                    case SyntaxKind.PropertyDeclaration:
                         emitSerializedTypeNode((<PropertyDeclaration>node).type);
                         return;
-                        
-                    case SyntaxKind.Parameter:              
+
+                    case SyntaxKind.Parameter:
                         emitSerializedTypeNode((<ParameterDeclaration>node).type);
                         return;
-                        
-                    case SyntaxKind.GetAccessor:            
+
+                    case SyntaxKind.GetAccessor:
                         emitSerializedTypeNode((<AccessorDeclaration>node).type);
                         return;
-                        
-                    case SyntaxKind.SetAccessor:            
+
+                    case SyntaxKind.SetAccessor:
                         emitSerializedTypeNode(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
                         return;
-                        
+
                 }
-                
+
                 if (isFunctionLike(node)) {
                     write("Function");
                     return;
                 }
-                
+
                 write("void 0");
             }
-            
+
             function emitSerializedTypeNode(node: TypeNode) {
-                
+
                 if(!node) {
                     return; //don't write anything on the stream when type is not defined
                 }
-                
+
                 switch (node.kind) {
                     case SyntaxKind.VoidKeyword:
                         write("void 0");
@@ -4880,17 +4888,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.ParenthesizedType:
                         emitSerializedTypeNode((<ParenthesizedTypeNode>node).type);
                         return;
-                        
+
                     case SyntaxKind.FunctionType:
                     case SyntaxKind.ConstructorType:
                         write("Function");
                         return;
-                        
+
                     case SyntaxKind.ArrayType:
                     case SyntaxKind.TupleType:
                         write("Array");
                         return;
-                        
+
                     case SyntaxKind.TypePredicate:
                     case SyntaxKind.BooleanKeyword:
                         write("Boolean");
@@ -4900,11 +4908,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.StringLiteral:
                         write("String");
                         return;
-                        
+
                     case SyntaxKind.NumberKeyword:
                         write("Number");
                         return;
-                        
+
                     case SyntaxKind.SymbolKeyword:
                         write("Symbol");
                         return;
@@ -4912,22 +4920,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.TypeReference:
                         emitSerializedTypeReferenceNode(<TypeReferenceNode>node);
                         return;
-                        
+
                     case SyntaxKind.TypeQuery:
                     case SyntaxKind.TypeLiteral:
                     case SyntaxKind.UnionType:
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.AnyKeyword:
                         break;
-                        
+
                     default:
                         Debug.fail("Cannot serialize unexpected type node.");
                         break;
                 }
-                
+
                 write("Object");
             }
-            
+
             /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
             function emitSerializedTypeReferenceNode(node: TypeReferenceNode) {
                 let typeName = node.typeName;
@@ -4947,27 +4955,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
                         emitEntityNameAsExpression(typeName, /*useFallback*/ false);
                         break;
-                        
+
                     case TypeReferenceSerializationKind.VoidType:
                         write("void 0");
                         break;
-                        
+
                     case TypeReferenceSerializationKind.BooleanType:
                         write("Boolean");
                         break;
-                        
+
                     case TypeReferenceSerializationKind.NumberLikeType:
                         write("Number");
                         break;
-                        
+
                     case TypeReferenceSerializationKind.StringLikeType:
                         write("String");
                         break;
-                        
+
                     case TypeReferenceSerializationKind.ArrayLikeType:
                         write("Array");
                         break;
-                        
+
                     case TypeReferenceSerializationKind.ESSymbolType:
                         if (languageVersion < ScriptTarget.ES6) {
                             write("typeof Symbol === 'function' ? Symbol : Object");
@@ -4976,30 +4984,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write("Symbol");
                         }
                         break;
-                        
+
                     case TypeReferenceSerializationKind.TypeWithCallSignature:
                         write("Function");
                         break;
-                        
+
                     case TypeReferenceSerializationKind.InterfaceType:
                         if(customInterfaceEmitter) {
                             write(customInterfaceEmitter.emitInterfaceMetadata(resolver.getTypeFromTypeNode(node)));
                             break;
                         }
-                        
+
                     case TypeReferenceSerializationKind.ObjectType:
                         write("Object");
                         break;
                 }
             }
-            
+
             /** Serializes the parameter types of a function or the constructor of a class. Used by the __metadata decorator for a method or set accessor. */
             function emitSerializedParameterTypesOfNode(node: Node) {
                 // serialization of parameter types uses the following rules:
                 //
                 // * If the declaration is a class, the parameters of the first constructor with a body are used.
                 // * If the declaration is function-like and has a body, the parameters of the function are used.
-                // 
+                //
                 // For the rules on serializing the type of each parameter declaration, see `serializeTypeOfDeclaration`.
                 if (node) {
                     var valueDeclaration: FunctionLikeDeclaration;
@@ -5009,7 +5017,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     else if (isFunctionLike(node) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
                         valueDeclaration = <FunctionLikeDeclaration>node;
                     }
-                    
+
                     if (valueDeclaration) {
                         var parameters = valueDeclaration.parameters;
                         var parameterCount = parameters.length;
@@ -5018,7 +5026,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 if (i > 0) {
                                     write(", ");
                                 }
-                                
+
                                 if (parameters[i].dotDotDotToken) {
                                     var parameterType = parameters[i].type;
                                     if (parameterType.kind === SyntaxKind.ArrayType) {
@@ -5030,7 +5038,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                     else {
                                         parameterType = undefined;
                                     }
-                                    
+
                                     emitSerializedTypeNode(parameterType);
                                 }
                                 else {
@@ -5041,18 +5049,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
             }
-            
+
             /** Serializes the return type of function. Used by the __metadata decorator for a method. */
             function emitSerializedReturnTypeOfNode(node: Node): string | string[] {
                 if (node && isFunctionLike(node) && (<FunctionLikeDeclaration>node).type) {
                     emitSerializedTypeNode((<FunctionLikeDeclaration>node).type);
                     return;
                 }
-                
+
                 write("void 0");
             }
-            
-            
+
+
             function emitSerializedTypeMetadata(node: Declaration, writeComma: boolean): number {
                 // This method emits the serialized type metadata for a decorator target.
                 // The caller should have already tested whether the node has decorators.
@@ -5078,11 +5086,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write("])");
                         argumentsWritten++;
                     }
+                    if (shouldEmitClassNameMetadata(node)) {
+                        if (writeComma || argumentsWritten) {
+                            write(", ");
+                        }
+                        writeLine();
+                        write("__metadata('design:typename', '");
+                        emitDeclarationName(node);
+                        write("')");
+                        argumentsWritten++;
+                    }
                     if (shouldEmitReturnTypeMetadata(node)) {
                         if (writeComma || argumentsWritten) {
                             write(", ");
                         }
-                        
+
                         writeLine();
                         write("__metadata('design:returntype', ");
                         emitSerializedReturnTypeOfNode(node);
@@ -5090,10 +5108,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         argumentsWritten++;
                     }
                 }
-                
+
                 return argumentsWritten;
             }
-            
+
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
                 emitOnlyPinnedOrTripleSlashComments(node);
             }
@@ -5442,18 +5460,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     (!isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportEqualsWithEntityName(node))) {
                     emitLeadingComments(node);
                     emitStart(node);
-                    
+
                     // variable declaration for import-equals declaration can be hoisted in system modules
                     // in this case 'var' should be omitted and emit should contain only initialization
                     let variableDeclarationIsHoisted = shouldHoistVariable(node, /*checkIfSourceFileLevelDecl*/ true);
-                    
+
                     // is it top level export import v = a.b.c in system module?
                     // if yes - it needs to be rewritten as exporter('v', v = a.b.c)
                     let isExported = isSourceFileLevelDeclarationInSystemJsModule(node, /*isExported*/ true);
-                    
+
                     if (!variableDeclarationIsHoisted) {
                         Debug.assert(!isExported);
-                                                
+
                         if (isES6ExportedDeclaration(node)) {
                             write("export ");
                             write("var ");
@@ -5462,8 +5480,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write("var ");
                         }
                     }
-                                       
-                    
+
+
                     if (isExported) {
                         write(`${exportFunctionForFile}("`);
                         emitNodeWithoutSourceMap(node.name);
@@ -5477,8 +5495,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (isExported) {
                         write(")");
                     }
-                                        
-                    write(";");                    
+
+                    write(";");
                     emitEnd(node);
                     emitExportImportAssignments(node);
                     emitTrailingComments(node);
@@ -6004,12 +6022,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                         return;
                     }
-                    
+
                     if (isInternalModuleImportEqualsDeclaration(node)) {
                         if (!hoistedVars) {
                             hoistedVars = [];
                         }
-                        
+
                         hoistedVars.push(node.name);
                         return;
                     }
