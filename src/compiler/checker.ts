@@ -14338,15 +14338,16 @@ namespace ts {
             else if (allConstituentTypesHaveKind(type, TypeFlags.ESSymbol)) {
                 return TypeReferenceSerializationKind.ESSymbolType;
             }
+            else if(isInterfaceType(type)) {
+                return TypeReferenceSerializationKind.InterfaceType;
+            }
             else if (isFunctionType(type)) {
                 return TypeReferenceSerializationKind.TypeWithCallSignature;
             }
             else if (isArrayType(type)) {
                 return TypeReferenceSerializationKind.ArrayLikeType;
             }
-            else if(isInterfaceType(type)) {
-                return TypeReferenceSerializationKind.InterfaceType;
-            }
+            
             else {
                 return TypeReferenceSerializationKind.ObjectType;
             }
