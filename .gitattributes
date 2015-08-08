@@ -1,2 +1,10 @@
 *.js linguist-language=TypeScript
 * -text
+built           export-ignore
+doc             export-ignore
+scripts         export-ignore
+src             export-ignore
+tests           export-ignore
+Jakefile        export-ignore
+.travis.yml     export-ignore
+.settings       export-ignore
