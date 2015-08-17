@@ -364,6 +364,7 @@ module FourSlash {
                 InsertSpaceAfterKeywordsInControlFlowStatements: true,
                 InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
@@ -1883,7 +1884,7 @@ module FourSlash {
                     );
                 assert.equal(
                     expected.join(","),
-                    actual.fileNameList.map( file => {
+                    actual.fileNames.map( file => {
                         return file.replace(this.basePath + "/", "");
                         }).join(",")
                     );
@@ -1937,6 +1938,32 @@ module FourSlash {
 
                 if (expectedSpan.start !== actualCommentSpan.start || expectedSpan.end !== ts.textSpanEnd(actualCommentSpan)) {
                     this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.start},${expectedSpan.end}),  actual: (${actualCommentSpan.start},${ts.textSpanEnd(actualCommentSpan)})`);
+                }
+            }
+        }
+
+        public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
+            const name = "verifyDocCommentTemplate";
+            let actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+
+            if (expected === undefined) {
+                if (actual) {
+                    this.raiseError(name + ' failed - expected no template but got {newText: \"' + actual.newText + '\" caretOffset: ' + actual.caretOffset + '}');
+                }
+
+                return;
+            }
+            else {
+                if (actual === undefined) {
+                    this.raiseError(name + ' failed - expected the template {newText: \"' + actual.newText + '\" caretOffset: ' + actual.caretOffset + '} but got nothing instead');
+                }
+
+                if (actual.newText !== expected.newText) {
+                    this.raiseError(name + ' failed - expected insertion:\n' + expected.newText + '\nactual insertion:\n' + actual.newText);
+                }
+
+                if (actual.caretOffset !== expected.caretOffset) {
+                    this.raiseError(name + ' failed - expected caretOffset: ' + expected.caretOffset + ',\nactual caretOffset:' + actual.caretOffset);
                 }
             }
         }
