@@ -3544,7 +3544,7 @@ declare module Intl {
         currency?: string;
         currencyDisplay?: string;
         useGrouping?: boolean;
-        minimumintegerDigits?: number;
+        minimumIntegerDigits?: number;
         minimumFractionDigits?: number;
         maximumFractionDigits?: number;
         minimumSignificantDigits?: number;
@@ -3557,7 +3557,7 @@ declare module Intl {
         style: string;
         currency?: string;
         currencyDisplay?: string;
-        minimumintegerDigits: number;
+        minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
         minimumSignificantDigits?: number;
@@ -3591,6 +3591,7 @@ declare module Intl {
         timeZoneName?: string;
         formatMatcher?: string;
         hour12?: boolean;
+        timeZone?: string;
     }
 
     interface ResolvedDateTimeFormatOptions {
@@ -3660,18 +3661,45 @@ interface Number {
 
 interface Date {
     /**
-      * Converts a date to a string by using the current or specified locale.  
+      * Converts a date and time to a string by using the current or specified locale.  
       * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
     toLocaleString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
+    /**
+      * Converts a date to a string by using the current or specified locale.  
+      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param options An object that contains one or more properties that specify comparison options.
+      */
+    toLocaleDateString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
 
+    /**
+      * Converts a time to a string by using the current or specified locale.  
+      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param options An object that contains one or more properties that specify comparison options.
+      */
+    toLocaleTimeString(locale?: string[], options?: Intl.DateTimeFormatOptions): string;
+    
+    /**
+      * Converts a date and time to a string by using the current or specified locale.  
+      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param options An object that contains one or more properties that specify comparison options.
+      */
+    toLocaleString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+    
     /**
       * Converts a date to a string by using the current or specified locale.  
       * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+    toLocaleDateString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+
+    /**
+      * Converts a time to a string by using the current or specified locale.  
+      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param options An object that contains one or more properties that specify comparison options.
+      */
+    toLocaleTimeString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
 }
 
 
@@ -6592,6 +6620,7 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     webkitMatchesSelector(selectors: string): boolean;
     webkitRequestFullScreen(): void;
     webkitRequestFullscreen(): void;
+    getElementsByClassName(classNames: string): NodeListOf<Element>;
     addEventListener(type: "MSGestureChange", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -7579,7 +7608,6 @@ interface HTMLElement extends Element {
     contains(child: HTMLElement): boolean;
     dragDrop(): boolean;
     focus(): void;
-    getElementsByClassName(classNames: string): NodeListOf<Element>;
     insertAdjacentElement(position: string, insertedElement: Element): Element;
     insertAdjacentHTML(where: string, html: string): void;
     insertAdjacentText(where: string, text: string): void;
@@ -11379,7 +11407,7 @@ interface MessageEvent extends Event {
 
 declare var MessageEvent: {
     prototype: MessageEvent;
-    new(): MessageEvent;
+    new(type: string, eventInitDict?: MessageEventInit): MessageEvent;
 }
 
 interface MessagePort extends EventTarget {
@@ -12121,7 +12149,7 @@ interface ProgressEvent extends Event {
 
 declare var ProgressEvent: {
     prototype: ProgressEvent;
-    new(): ProgressEvent;
+    new(type: string, eventInitDict?: ProgressEventInit): ProgressEvent;
 }
 
 interface Range {
@@ -16298,6 +16326,21 @@ interface EventListenerObject {
 }
 
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
+
+interface MessageEventInit extends EventInit {
+    data?: any;
+    origin?: string;
+    lastEventId?: string;
+    channel?: string;
+    source?: any;
+    ports?: MessagePort[];
+}
+
+interface ProgressEventInit extends EventInit {
+    lengthComputable?: boolean;
+    loaded?: number;
+    total?: number;
+}
 
 interface ErrorEventHandler {
     (message: string, filename?: string, lineno?: number, colno?: number, error?:Error): void;
