@@ -11,6 +11,7 @@
         "core.ts",
         "sys.ts",
         "types.ts",
+        "diagnosticInformationMap.generated.ts",
         "scanner.ts",
         "parser.ts",
         "utilities.ts",
@@ -20,7 +21,6 @@
         "program.ts",
         "commandLineParser.ts",
         "tsc.ts",
-        "diagnosticInformationMap.generated.ts",
         "custom.ts"
     ]
 }
